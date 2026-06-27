@@ -31,6 +31,14 @@ fetch('data/roads_seniro_ToJSON.geojson')
                 } else {
                     return { color: '#00ccff', weight: 5, opacity: 0.9 }; // لون الطريق الثاني (أزرق سماوي)
                 }
+            },
+            onEachFeature: function(feature, layer) {
+                // إضافة معلومات ذكية عند الضغط على المسار
+                if (feature.id === 0 || feature.properties.FID === 0) {
+                    layer.bindPopup("<div style='text-align:right;'><b>المسار الأيمن</b><br>الطول: ~1.8 كم<br>الوقت بالسيارة: 4 دقائق<br><i style='color:#ff3300;'>يتميز بوجود نفق للعبور</i></div>");
+                } else {
+                    layer.bindPopup("<div style='text-align:right;'><b>المسار الأيسر</b><br>الطول: ~2.1 كم<br>الوقت بالسيارة: 5 دقائق<br><i style='color:#00ccff;'>يتقاطع مع خط سكة حديد</i></div>");
+                }
             }
         });
         console.log('تم تحميل طبقات الطريق بنجاح (يمين وشمال)');

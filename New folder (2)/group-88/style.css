@@ -124,3 +124,17 @@ margin-left: 20px;
 .custom-icon img {
     animation: pulse 2s infinite;
 }
+
+/* --- تأثير النبض للجامعة --- */
+.pulse-icon {
+    border-radius: 50%;
+    background: #FC6736;
+    border: 2px solid white;
+    box-shadow: 0 0 0 rgba(252, 103, 54, 0.4);
+    animation: pulse-animation 2s infinite;
+}
+@keyframes pulse-animation {
+    0% { box-shadow: 0 0 0 0 rgba(252, 103, 54, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(252, 103, 54, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(252, 103, 54, 0); }
+}

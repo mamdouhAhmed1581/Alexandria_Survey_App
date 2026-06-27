@@ -111,7 +111,15 @@ fetch('data/أكبر 3 من حيث المساحة .geojson').then(res => res.jso
 // --- تحميل طبقة موقع الجامعة ---
 fetch('data/Uni_Point_ToJSON.geojson').then(res => res.json()).then(data => {
     universityLayer = L.geoJSON(data, {
-        pointToLayer: (f, ll) => L.marker(ll).bindPopup("<b>الجامعة الأهلية</b>")
+        pointToLayer: (f, ll) => {
+            return L.marker(ll, {
+                icon: L.divIcon({
+                    className: 'pulse-icon',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                })
+            }).bindPopup("<div style='text-align:center;'><b>موقع الجامعة الأهلية</b><br>المحور الرئيسي للبحث</div>");
+        }
     });
     // لا تضيف الطبقة هنا - الـ setTimeout هو المسؤول عن الإضافة
 });
@@ -173,7 +181,14 @@ document.getElementById('toggle-university')?.addEventListener('click', () => {
     if (universityLayer) { map.hasLayer(universityLayer) ? map.removeLayer(universityLayer) : universityLayer.addTo(map); }
 });
 document.getElementById('toggle-top3')?.addEventListener('click', () => {
-    if (top3Layer) { map.hasLayer(top3Layer) ? map.removeLayer(top3Layer) : top3Layer.addTo(map); }
+    if (top3Layer) { 
+        if (map.hasLayer(top3Layer)) {
+            map.removeLayer(top3Layer);
+        } else {
+            top3Layer.addTo(map);
+            map.flyToBounds(top3Layer.getBounds(), { padding: [50, 50], duration: 1.5 });
+        }
+    }
 });
 document.getElementById('toggle-shyakha')?.addEventListener('click', () => {
     if (shyakhaLayer) { map.hasLayer(shyakhaLayer) ? map.removeLayer(shyakhaLayer) : shyakhaLayer.addTo(map); }
@@ -185,7 +200,14 @@ document.getElementById('toggle-sour2')?.addEventListener('click', () => {
     if (sour2Layer) { map.hasLayer(sour2Layer) ? map.removeLayer(sour2Layer) : sour2Layer.addTo(map); }
 });
 document.getElementById('toggle-suggested')?.addEventListener('click', () => {
-    if (suggestedPlacesLayer) { map.hasLayer(suggestedPlacesLayer) ? map.removeLayer(suggestedPlacesLayer) : suggestedPlacesLayer.addTo(map); }
+    if (suggestedPlacesLayer) { 
+        if (map.hasLayer(suggestedPlacesLayer)) {
+            map.removeLayer(suggestedPlacesLayer);
+        } else {
+            suggestedPlacesLayer.addTo(map);
+            map.flyToBounds(suggestedPlacesLayer.getBounds(), { padding: [50, 50], duration: 1.5 });
+        }
+    }
 });
 
 // زر البوابات (البوابات - موجود في كلا الصفحتين)
