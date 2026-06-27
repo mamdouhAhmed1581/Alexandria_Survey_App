@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>مشروع الملاءمة المكانية - Spatial Suitability</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            margin: 20px auto;
+            max-width: 900px;
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        h3 { color: #16a085; }
+        a.btn {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        a.btn:hover { background-color: #c0392b; }
+        ul, ol { margin-right: 20px; }
+        li { margin-bottom: 10px; }
+        .highlight { background-color: #e8f8f5; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #0e6251; }
+        .academic-box {
+            background-color: #fdfefe;
+            border-right: 5px solid #2ecc71;
+            padding: 20px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-left: 5px solid #ffeeba;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>مشروع التحليل المكاني (Spatial Suitability Analysis)</h1>
+        <p>مرحباً بك. تم دمج المشروع بالكامل في هذا الملف الشامل ليكون مرجعاً واضحاً ومنسقاً يمكنك قراءته بسهولة وتنفيذ الخطوات منه مباشرة.</p>
+
+        <h2>أولاً: الروابط المباشرة للبيانات (جاهزة للتحميل)</h2>
+        <div class="note">اضغط على الأزرار الحمراء لتبدأ عملية التحميل فوراً.</div>
+        
+        <h3>1. شبكة الطرق والمدارس الحالية (Vector Data)</h3>
+        <ul>
+            <li><strong>الاسم:</strong> Egypt OpenStreetMap Shapefiles</li>
+            <li><strong>المصدر:</strong> Geofabrik</li>
+            <li><a href="https://download.geofabrik.de/africa/egypt-latest-free.shp.zip" class="btn" target="_blank">تحميل ملف طرق ومدارس مصر (110 MB)</a></li>
+            <li><strong>ماذا ستستخدم منه؟</strong> ملف <span class="highlight">gis_osm_roads_free_1.shp</span> (للطرق) وملف <span class="highlight">gis_osm_pois_free_1.shp</span> (لاستخراج المدارس).</li>
+        </ul>
+
+        <h3>2. حدود منطقة الدراسة (Study Area Boundary)</h3>
+        <ul>
+            <li><strong>الاسم:</strong> Egypt Administrative Boundaries</li>
+            <li><strong>المصدر:</strong> DIVA-GIS</li>
+            <li><a href="https://biogeo.ucdavis.edu/data/diva/adm/EGY_adm.zip" class="btn" target="_blank">تحميل حدود مدن مصر (2 MB)</a></li>
+            <li><strong>ماذا ستستخدم منه؟</strong> ملف <span class="highlight">EGY_adm2.shp</span> لاستخراج حدود مدينة الشروق.</li>
+        </ul>
+
+        <h3>3. نموذج الارتفاع الرقمي (DEM 30m)</h3>
+        <ul>
+            <li><strong>المصدر:</strong> USGS EarthExplorer</li>
+            <li><a href="https://earthexplorer.usgs.gov/" class="btn" target="_blank">الذهاب لموقع USGS</a></li>
+            <li><strong>طريقة التحميل (بسبب سياسات الأمان للموقع):</strong> سجل دخول مجاني، ابحث عن <strong>Cairo, Egypt</strong>، اختر Data Sets ثم <strong>Digital Elevation > SRTM > SRTM 1 Arc-Second Global</strong>. حمل الملف بصيغة GeoTIFF (اسمه n30_e031_1arc_v3.tif).</li>
+        </ul>
+
+        <h2>ثانيًا: تجهيز البيانات داخل ArcGIS Pro</h2>
+        
+        <h3>الخطوة 1: استخراج حدود مدينة الشروق (Study Area)</h3>
+        <ol>
+            <li>اسحب ملف <code>EGY_adm2.shp</code> داخل البرنامج.</li>
+            <li>كليك يمين على الطبقة > <strong>Attribute Table</strong>.</li>
+            <li>ابحث في عمود (NAME_2) عن مدينة الشروق (El Shorouk) وحددها.</li>
+            <li>كليك يمين على الطبقة > <strong>Data</strong> > <strong>Export Features</strong>.</li>
+            <li>سَمِّ الملف <span class="highlight">Study_Area.shp</span> واضغط OK. (احذف طبقة مصر الأصلية).</li>
+        </ol>
+
+        <h3>الخطوة 2: استخراج شبكة الطرق (Roads)</h3>
+        <ol>
+            <li>افتح أداة <strong>Clip</strong> (من Analysis > Tools).</li>
+            <li><strong>Input:</strong> ملف <code>gis_osm_roads_free_1.shp</code>.</li>
+            <li><strong>Clip Features:</strong> <code>Study_Area.shp</code>.</li>
+            <li><strong>Output:</strong> <span class="highlight">Roads.shp</span>. واضغط Run.</li>
+        </ol>
+
+        <h3>الخطوة 3: استخراج المدارس الحالية (Schools)</h3>
+        <ol>
+            <li>اسحب ملف <code>gis_osm_pois_free_1.shp</code> داخل البرنامج.</li>
+            <li>من تبويب Map، اضغط على <strong>Select By Attributes</strong>.</li>
+            <li>اكتب المعادلة: <code>fclass is equal to school</code> واضغط OK.</li>
+            <li>كليك يمين > <strong>Data</strong> > <strong>Export Features</strong> باسم <code>Schools_Existing.shp</code>.</li>
+            <li>استخدم أداة <strong>Clip</strong> لقصها على حدود الشروق، وسَمِّ الناتج <span class="highlight">Schools.shp</span>.</li>
+        </ol>
+
+        <h3>الخطوة 4: قص بيانات الـ DEM</h3>
+        <ol>
+            <li>افتح أداة <strong>Extract by Mask</strong>.</li>
+            <li><strong>Input Raster:</strong> ملف الـ DEM الأصلي.</li>
+            <li><strong>Mask:</strong> <code>Study_Area.shp</code>.</li>
+            <li><strong>Output:</strong> <span class="highlight">DEM_Shorouk.tif</span> واضغط Run.</li>
+        </ol>
+
+        <h2>ثالثًا: إعدادات البيئة (Environment Settings) - هام جداً</h2>
+        <p>من تبويب Analysis > Environments قم بضبط الآتي:</p>
+        <ul>
+            <li><strong>Extent:</strong> اختر <code>Study_Area.shp</code>.</li>
+            <li><strong>Snap Raster:</strong> اختر <code>DEM_Shorouk.tif</code>.</li>
+            <li><strong>Cell Size:</strong> اختر <code>DEM_Shorouk.tif</code>.</li>
+            <li><strong>Mask:</strong> اختر <code>Study_Area.shp</code>.</li>
+        </ul>
+
+        <h2>رابعًا: منهجية العمل (Spatial Analysis Workflow)</h2>
+        
+        <h3>1. المسافة الإقليدية والانحدار (Spatial Tools)</h3>
+        <ul>
+            <li><strong>أداة Euclidean Distance:</strong> استخدمها مرتين؛ الأولى لطبقة الطرق (الناتج: <code>EucDist_Roads.tif</code>)، والثانية لطبقة المدارس (الناتج: <code>EucDist_Schools.tif</code>).</li>
+            <li><strong>أداة Slope:</strong> استخدمها لطبقة DEM (الناتج: <code>Slope_Map.tif</code>)، وتأكد أن القياس بالـ Degree.</li>
+        </ul>
+
+        <h3>2. إعادة التصنيف (Reclassify)</h3>
+        <p>افتح أداة <strong>Reclassify</strong> وصنف الطبقات الثلاث من 1 إلى 5:</p>
+        <ul>
+            <li><strong>للمدارس:</strong> البعد الأكبر يأخذ 5، والمسافة القريبة تأخذ 1. (الناتج: <code>Reclass_Schools.tif</code>).</li>
+            <li><strong>للطرق:</strong> المسافة القريبة تأخذ 5، والبعيدة تأخذ 1. (الناتج: <code>Reclass_Roads.tif</code>).</li>
+            <li><strong>للانحدار:</strong> الانحدار الأقل (0-3) يأخذ 5، والمنحدر جداً يأخذ 1. (الناتج: <code>Reclass_Slope.tif</code>).</li>
+        </ul>
+
+        <h3>3. الدمج المرجح (Weighted Overlay)</h3>
+        <ul>
+            <li>افتح أداة <strong>Weighted Overlay</strong> وأضف الطبقات الثلاث.</li>
+            <li><strong>الأوزان:</strong> المدارس (40%)، الطرق (30%)، الانحدار (30%).</li>
+            <li><strong>Scale:</strong> 1 to 5 by 1.</li>
+            <li><strong>الناتج:</strong> خريطة <span class="highlight">Final_Suitability_Map.tif</span>.</li>
+        </ul>
+
+        <h2>خامسًا: منشئ النماذج (ModelBuilder)</h2>
+        <ol>
+            <li>من تبويب Analysis اضغط على <strong>ModelBuilder</strong>.</li>
+            <li>اسحب المدخلات (Roads, Schools, DEM) للشاشة البيضاء.</li>
+            <li>اسحب الأدوات (Euclidean Distance, Slope, Reclassify, Weighted Overlay).</li>
+            <li>قم بتوصيل المدخلات بالأدوات بالترتيب، ثم اضغط <strong>Auto Layout</strong> لترتيب الشكل، واضغط <strong>Run</strong> لتشغيله ككتلة واحدة.</li>
+        </ol>
+
+        <h2>سادسًا: الخرائط الـ 12 المطلوبة (Layouts)</h2>
+        <ol>
+            <li>خريطة منطقة الدراسة (Study Area Map).</li>
+            <li>خريطة الطرق (Roads Map).</li>
+            <li>خريطة المدارس (Schools Map).</li>
+            <li>خريطة الارتفاعات (DEM Map).</li>
+            <li>خريطة النطاقات للطرق (EucDist Roads).</li>
+            <li>خريطة النطاقات للمدارس (EucDist Schools).</li>
+            <li>خريطة الانحدار (Slope Map).</li>
+            <li>خريطة إعادة تصنيف الطرق (Reclass Roads).</li>
+            <li>خريطة إعادة تصنيف المدارس (Reclass Schools).</li>
+            <li>خريطة إعادة تصنيف الانحدار (Reclass Slope).</li>
+            <li>خريطة الملاءمة النهائية (Final Suitability Map) - لون رقم 5 بالأخضر الداكن و 1 بالأحمر.</li>
+            <li>صورة للموديل بيلدر (ModelBuilder Layout).</li>
+        </ol>
+        <p><em>لا تنسَ إضافة: عنوان، مفتاح (Legend)، سهم شمال، ومقياس رسم لكل خريطة.</em></p>
+
+        <h2>سابعًا: النص الأكاديمي للبحث (جاهز للنسخ)</h2>
+        <div class="academic-box">
+            <h3>1. المقدمة (Introduction):</h3>
+            <p>يهدف هذا البحث إلى تطبيق تقنيات نظم المعلومات الجغرافية (GIS) وبالأخص تحليل الملاءمة المكانية (Spatial Suitability Analysis) لتحديد أنسب المواقع المقترحة لإنشاء مدرسة خدمات حكومية جديدة في منطقة الدراسة. تم الاعتماد على أسلوب التحليل متعدد المعايير (Multi-Criteria Evaluation) لضمان اتخاذ قرار علمي مدروس يحقق الكفاءة في التوزيع الجغرافي للخدمات.</p>
+
+            <h3>2. منطقة الدراسة (Study Area):</h3>
+            <p>تم اختيار "مدينة الشروق" كمنطقة للدراسة، وهي إحدى مدن الجيل التابع لهيئة المجتمعات العمرانية الجديدة. تمتاز المدينة بوجود شبكة طرق جيدة وتوسع عمراني مستمر يتطلب توفير خدمات تعليمية إضافية. يتراوح ارتفاع المدينة تضاريسياً بشكل يوفر تنوعاً ملائماً لتطبيق معايير التحليل الطبوغرافي.</p>
+
+            <h3>3. منهجية البحث (Methodology):</h3>
+            <p>اعتمدت المنهجية على أربعة معايير مكانية رئيسية تم تطبيقها داخل بيئة برنامج ArcGIS Pro:</p>
+            <ul>
+                <li><strong>التحليل المكاني للمسافات (Euclidean Distance):</strong> لقياس مدى القرب والبعد عن شبكة الطرق لتسهيل الوصول، وكذلك قياس البعد عن المدارس القائمة لضمان عدم التكدس الخدمي في منطقة واحدة.</li>
+                <li><strong>تحليل الانحدار (Slope):</strong> باستخدام نموذج الارتفاع الرقمي (DEM) لتحديد المناطق المستوية التي تقلل من تكلفة الإنشاءات.</li>
+                <li><strong>إعادة التصنيف (Reclassify):</strong> تم توحيد القياسات لجميع الطبقات على مقياس من 1 إلى 5، حيث تمثل القيمة (5) أعلى درجات الملاءمة والقيمة (1) أقلها.</li>
+                <li><strong>الدمج المرجح (Weighted Overlay):</strong> تم إعطاء أوزان نسبية للطبقات بناءً على الأهمية التخطيطية كالتالي: البعد عن المدارس الحالية (40%)، القرب من الطرق (30%)، ومعدل الانحدار (30%).</li>
+            </ul>
+
+            <h3>4. مناقشة النتائج وتفسير الملائمة (Results & Conclusion):</h3>
+            <p>أظهرت خريطة الملاءمة النهائية (Final Suitability Map) تبايناً واضحاً في درجات الملاءمة داخل حدود منطقة الدراسة. وتمركزت المناطق "شديدة الملاءمة" (الفئة 5 - ممثلة باللون الأخضر الداكن) في الأراضي المستوية (ذات الانحدار الأقل من 3 درجات)، والتي تقع بالقرب من الشرايين المرورية الرئيسية، وفي ذات الوقت تبعد مسافة كافية عن نطاق خدمة المدارس القائمة حالياً. ونستنتج من ذلك كفاءة أداة Weighted Overlay في دمج المعايير البيئية والعمرانية، مما يقدم لمتخذ القرار خريطة واضحة ودقيقة توفر الجهد والتكلفة عند التخطيط لمشاريع النفع العام مستقبلاً.</p>
+        </div>
+
+    </div>
+</body>
+</html>

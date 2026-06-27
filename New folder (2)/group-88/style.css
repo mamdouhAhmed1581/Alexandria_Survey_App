@@ -1,0 +1,126 @@
+/* --- الإعدادات العامة --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    /* height: 100%; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- شريط التنقل العلوي --- */
+.navbar {
+    height: 60px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    
+  background: #0C2D57;
+  border-bottom: 1px solid #FC6736;
+
+
+}
+.logo img{
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+}
+
+.controls  {
+    display: flex;
+    gap: 10px;
+    height: 50px;
+}
+
+
+
+/* --- هيكل الصفحة --- */
+.main-container {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+#map {
+    flex-grow: 1;
+    height: 100%;
+}
+
+/* --- القائمة الجانبية (Sidebar) --- */
+.sidebar {
+    width: 260px;
+    background-color: #0C2D57;
+    padding: 15px;
+    border-left: 1px solid #FC6736;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+    overflow-y: auto; /* إضافة سكرول في حال زادت الأزرار */
+}
+
+.sidebar h3 {
+    width: 100%;
+    margin-top: 0;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+}
+
+/* --- الأزرار --- */
+button {
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #FC6736;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: background 0.3s ease;
+    width: calc(50% - 4px); /* تقسيم الأزرار لصفين */
+    font-weight: 600;
+
+}
+
+button:hover {
+    background-color: #fc4a0f;
+    
+}
+.controls button{
+    transition: .5s ease-in-out;
+    font-size: 15px;
+    font-weight: 700;
+}
+.controls button:hover{
+
+margin-left: 20px;
+}
+
+/* تنسيق خاص لأزرار الناف بار (تأخذ حجم النص فقط) */
+.controls button {
+    width: auto;
+    padding: 5px 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.custom-icon img {
+    animation: pulse 2s infinite;
+}

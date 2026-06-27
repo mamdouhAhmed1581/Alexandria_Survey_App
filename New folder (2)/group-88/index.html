@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>خريطة الخدمات الذكية</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <img src="img/logo.jpeg" alt="">
+        </div>
+        <div class="controls">
+            <button onclick="changeMap('dark')">Dark</button>
+            <button onclick="changeMap('light')">Light</button>
+            <button onclick="changeMap('satellite')">Satellite</button>
+            <button onclick="window.location.href='section2.html'">القسم الثاني</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <h3>التحكم في الطبقات</h3>
+            <button id="toggle-shyakha">حدود الشياخة</button>
+            <button id="toggle-sour1">سور (1)</button>
+            <button id="toggle-sour2">سور (2)</button>
+            <button id="toggle-suggested">الأماكن المقترحة</button>
+            <button id="toggle-top3">أكبر 3 مساحات</button>
+            <button id="toggle-services">البوابات</button>
+            <button id="toggle-university">موقع الجامعة</button>
+            <button id="toggle-restaurants">مطاعم</button>
+            <button id="toggle-cafes">كافيهات</button>
+            <button id="toggle-pharmacies">صيدليات</button>
+            <button id="toggle-libraries">مكتبات</button>
+            <br>
+            <div id="results-panel" style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
+                <h3>نتائج التحليل:</h3>
+                <div id="closest-services-list"></div>
+            </div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
