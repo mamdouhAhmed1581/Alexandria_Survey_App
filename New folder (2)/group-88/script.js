@@ -21,16 +21,14 @@ setTimeout(() => {
     });
 }, 800);
 
-// بعد انتهاء الأنيميشن: إظهار السيناريو فقط في القسم الأول
+// بعد انتهاء الأنيميشن: إظهار الأساسيات (الشياخة، السور، الجامعة، البوابات) في كلا القسمين
 setTimeout(() => {
     animationFinished = true;
-    if (!isSection2) {
-        if (shyakhaLayer) shyakhaLayer.addTo(map);
-        if (sour1Layer)   sour1Layer.addTo(map);
-        if (sour2Layer)   sour2Layer.addTo(map);
-        if (universityLayer) universityLayer.addTo(map);
-        if (gatesLayer)   gatesLayer.addTo(map);
-    }
+    if (shyakhaLayer) shyakhaLayer.addTo(map);
+    if (sour1Layer)   sour1Layer.addTo(map);
+    if (sour2Layer)   sour2Layer.addTo(map);
+    if (universityLayer) universityLayer.addTo(map);
+    if (gatesLayer)   gatesLayer.addTo(map);
 }, 5000);
 
 function changeMap(type) {
